@@ -9,3 +9,10 @@ def wrapper(*args):
                     del access_times[key]
                     del access_counts[key]
                     insert_order.remove(key)
+                    else:
+                times[key] = time.time()
+                counts[key] += 1
+                return cache[key]
+
+        if max_size and len(cache) >= max_size:
+            if policy == "lru":
