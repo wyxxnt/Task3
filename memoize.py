@@ -1,18 +1,20 @@
 import time
-def wrapper(*args):
+
+
+def memoize(func, max_size=None, policy="lru", ttl=None):
+    cache = {}
+    times = {}
+    counts = {}
+
+    def wrapper(*args):
         key = args
 
         if key in cache:
-            if ttl is not None:
-                if time.time() - access_times[key] > ttl:
-                    del cache[key]
-                    del access_times[key]
-                    del access_counts[key]
-                    insert_order.remove(key)
-                    else:
+            if ttl and time.time() - times[key] > ttl:
+                del cache[key]
+                del times[key]
+                del counts[key]
+            else:
                 times[key] = time.time()
                 counts[key] += 1
                 return cache[key]
-
-        if max_size and len(cache) >= max_size:
-            if policy == "lru":
